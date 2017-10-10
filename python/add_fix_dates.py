@@ -41,12 +41,16 @@ if __name__ == '__main__':
     each subsequent photo will be tagged with prior photo + increment seconds.
 
     '''
-    if len(sys.argv) != 4:
-        sys.exit("Usage: %s images-path starttime (yyyy-mm-dd hh:mm:ss) increment-in-seconds" % sys.argv[0])
+    if len(sys.argv) < 4:
+        sys.exit("Usage: %s images-path starttime (yyyy-mm-dd hh:mm:ss) increment-in-seconds [photo-offset]" % sys.argv[0])
 
     path = sys.argv[1]
     start_time = sys.argv[2]
     time_offset = float(sys.argv[3])
+    if len(sys.argv) == 5:
+        photo_offset = int(sys.argv[4])
+    else:
+        photo_offset = 0
 
     if path.lower().endswith(".jpg"):
         # single file
@@ -58,7 +62,7 @@ if __name__ == '__main__':
             file_list += [os.path.join(root, filename) for filename in files
                           if filename.lower().endswith(".jpg")]
 
-    inc = 0
+    inc = -((photo_offset-1)*time_offset)
     file_list.sort()
     start_time_dt = datetime.datetime.strptime(start_time, time_format)
 
